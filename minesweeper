@@ -1,0 +1,184 @@
+import java.util.*;
+public class MineSweeper {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+//declaring all the variables and 2d array
+		char a[][]=new char[9][9];
+		char b[][]=new char[9][9];
+		int grid[][]= new int[9][9];
+		int dup[][]=new int[9][9];
+		int row=0,col=0;
+		int count=0;
+		//populates the 2d array called grid
+		for(int i=0; i < grid.length;i++) {
+			grid[i][i]=i;
+		}
+	//populates the other two 2d arrays	a and b
+	for (int i = 0; i < grid.length; i++) {
+		for (int j = 0; j < grid.length; j++) {
+			a[i][j]='-';   
+	}	      
+}
+	for (int i = 0; i < grid.length; i++) {
+		for (int j = 0; j < grid.length; j++) {
+			b[i][j]='-';		   
+	}
+}		
+	//prints the grid to the user 
+	//and sets the random mines locations
+		//setMine(grid,a);
+		print(grid,a,row,col);		
+	setMine(grid,a);
+		System.out.println();
+		Scanner sc=new Scanner(System.in);
+		boolean check=false;	
+		String var ="-1:-1";	
+		boolean valid=false;
+do {	
+	do {	 
+		//checks if the user enters the same coordinate again
+		System.out.println("Enter your Guess Row and Column");
+		System.out.print("Enter Row: ");
+		row=sc.nextInt();
+		System.out.print("Enter Column: ");
+		col=sc.nextInt();
+		//this method searches for all the numbers in the string and to finds out if the number
+		//entered by the user is repeated or not
+		if(var.contains(String.valueOf(row)+":"+String.valueOf(col))|| col>8 || row>8){
+			System.out.println();
+			System.out.println("Invalid Guess, Cannot guess the same Location Twice");
+			System.out.println("Or out of bounds");
+			System.out.println();
+			valid=true;
+			
+		}else {
+			valid=false;
+		}
+		//Concatenate the users input
+		var = var + "," + row +":"+ col;	
+	}while(valid);
+	
+//conditions needed to run all the methods	
+if(a[row][col]=='*'){
+		mineHit(grid,a,b,row,col);
+		check=true;
+}else {
+	mineMiss(grid,a,b,row,col);
+	if( b[row][col]=='o') {
+			check=false;
+			count++;
+		}
+	}
+	if(count==71) {
+		Winner();
+		break;
+	}
+	}while(check!=true);
+	}
+	//prints the grid for the mine sweeper game
+	public static void print(int arr[][], char a[][],  int r, int c) {
+			System.out.println();
+				System.out.print("      ");
+				for(int i=0; i < arr.length;i++ ) {
+					System.out.print(arr[i][i]+"     ");	
+				}
+				System.out.println();
+				System.out.println();
+				for (int i = 0; i < arr.length; i++) {
+					 System.out.print(arr[i][i]);
+					   for (int j = 0; j < arr.length; j++) {
+						System.out.print("     "+a[i][j]);  
+					   }
+					   System.out.println();
+					   System.out.println();	      
+				}	
+		}
+//sets mine to random location	
+
+public static void setMine(int arr[][], char a[][]) {
+	
+	int[] count = new int[9];
+	
+	int x,y;
+	
+	Random rn= new Random();
+	for(int i=0; i<10;i++) {
+		x=rn.nextInt(9);
+		y=rn.nextInt(9);		
+		for(int j=0; j<count.length;j++) {
+			count[j]=x;
+			
+			while(count[j]==x) {
+				x=rn.nextInt(9);
+		}		
+		}	
+		a[x][y]='*';
+	}	
+}
+
+//method replaces missed spots by the user to a O
+public static void mineMiss(int arr[][],char a[][],char b[][],int r, int c) {
+
+	if(a[r][c]!='*') {
+		b[r][c]='o';
+		System.out.println();
+		System.out.println("WHooooo!,Lucky!,Not a Mine..");
+	}
+	System.out.println();
+		System.out.print("      ");
+		for(int i=0; i < arr.length;i++ ) {
+			
+			System.out.print(arr[i][i]+"     ");			
+		}
+		System.out.println();
+		System.out.println();
+	
+		
+		for (int i = 0; i < arr.length; i++) {
+			 System.out.print(arr[i][i]);
+			   for (int j = 0; j < arr.length; j++) {
+				System.out.print("     "+b[i][j]);  				
+			   }
+			   System.out.println();
+			   System.out.println();	      
+		}
+}
+
+//method replaces the * when hit to an X and prints out game over
+public static void mineHit(int arr[][],char a[][],char b[][],int r, int c) {
+	
+	if(a[r][c]=='*') {
+		b[r][c]='X';
+		System.out.println();
+		System.out.println("Whoopss You hit a Mine...");
+		System.out.println();
+		System.out.println("Game Over... Go Play Roblox!!!!!!");
+	}
+	
+
+	System.out.println();
+		System.out.print("      ");
+		for(int i=0; i < arr.length;i++ ) {
+			
+			System.out.print(arr[i][i]+"     ");
+			
+		}
+		System.out.println();
+		System.out.println();
+	
+		
+	for (int i = 0; i < arr.length; i++) {
+		System.out.print(arr[i][i]);
+		for (int j = 0; j < arr.length; j++) {
+			System.out.print("     "+b[i][j] );  	
+			   }
+			System.out.println();
+			System.out.println();	      
+		}
+}
+//Prints out the winning screen
+public static void Winner() {
+	System.out.println("GGGGGGS You Wonnnn!!!!!!!!");
+}	
+}
